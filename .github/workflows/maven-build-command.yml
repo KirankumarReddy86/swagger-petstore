@@ -33,3 +33,20 @@ jobs:
       # Step 3: Build and package the project using Maven
       - name: Build and package with Maven
         run: mvn clean package
+      - name: Configure Git user
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+      # Step 4: Replace the version in pom.xml with the updated version
+      - name: Update version in pom.xml
+        run: |
+
+          sed -i "/<project/,/<\/project>/s|<version>.*</version>|<version>2.0.6-SNAPSHOT</version>|" pom.xml
+          # git commit the version change
+      - name: commit version changes
+        run: |
+          git add pom.xml
+          git commit -m "updated version in pom.xml"
+          git fetch origin
+          git pull origin version-1 --rebase
+          git push origin HEAD:refs/heads/version-1

@@ -48,5 +48,6 @@ jobs:
           git add pom.xml
           git commit -m "updated version in pom.xml"
           git fetch origin
-          git pull origin version-2 --rebase
-          git push origin HEAD:refs/heads/version-2
+          git pull origin Koushik --rebase
+          git push origin HEAD:refs/heads/Koushik
+

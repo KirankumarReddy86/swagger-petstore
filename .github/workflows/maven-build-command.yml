@@ -41,7 +41,7 @@ jobs:
       - name: Update version in pom.xml
         run: |
 
-          sed -i '/<artifactId>swagger-petstore<\/artifactId>/!b;n;s|<version>.*</version>|<version>1.2.6-SNAPSHOT</version>|' pom.xml
+          sed -i '|<version>.*</version>|<version>1.2.6-SNAPSHOT</version>|' pom.xml
 
           # git commit the version change
       - name: commit version changes

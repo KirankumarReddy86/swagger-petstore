@@ -21,7 +21,7 @@ jobs:
       # Step 2: Create a new branch `dynamic-vars-tasks`
       - name: Create a new branch
         run: |
-          git checkout -b dynamic-vars-tasks Koushik
+          git checkout -b dynamic-vars-tasks master
 
       # Step 3: Set up JDK 8
       - name: Set up JDK 8

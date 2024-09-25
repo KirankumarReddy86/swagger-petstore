@@ -1,0 +1,53 @@
+name: Maven Build Command
+
+# Triggers the workflow on push or pull requests to the 'main' branch
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Step 1: Check out the code from the repository
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: "8"
+          distribution: "adopt"
+      # Step 2: Cache Maven dependencies to speed up build times
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Step 3: Build and package the project using Maven
+      - name: Build and package with Maven
+        run: mvn clean package
+      - name: Configure Git user
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+      # Step 4: Replace the version in pom.xml with the updated version
+      - name: Update version in pom.xml
+        run: |
+
+          sed -i '/<artifactId>swagger-petstore<\/artifactId>/!b;n;s|<version>.*</version>|<version>1.2.6-SNAPSHOT</version>|' pom.xml
+
+          # git commit the version change
+      - name: commit version changes
+        run: |
+          git add pom.xml
+          git commit -m "updated version in pom.xml"
+          git fetch origin
+          git pull origin version-1 --rebase
+          git push origin HEAD:refs/heads/version-1
